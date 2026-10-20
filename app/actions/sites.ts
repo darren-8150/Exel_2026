@@ -15,7 +15,7 @@ async function getUserId() {
 
 export async function getSites() {
   const userId = await getUserId()
-  return db.select({ id: sites.id, name: sites.name }).from(sites).where(eq(sites.userId, userId)).orderBy(desc(sites.createdAt))
+  return db.select({ id: sites.id, name: sites.name, accountName: sites.accountName, customerSuffix: sites.customerSuffix, webAddress: sites.webAddress, loggedAt: sites.loggedAt, loggedBy: sites.loggedBy }).from(sites).where(eq(sites.userId, userId)).orderBy(desc(sites.createdAt))
 }
 
 export async function createSite(name: string) {
@@ -23,8 +23,8 @@ export async function createSite(name: string) {
   const trimmedName = name.trim()
   if (!trimmedName || trimmedName.length > 160) throw new Error('Enter a site name up to 160 characters.')
   const id = crypto.randomUUID()
-  await db.insert(sites).values({ id, userId, name: trimmedName })
+  const loggedAt = new Date()
+  await db.insert(sites).values({ id, userId, name: trimmedName, accountName: trimmedName, loggedAt, loggedBy: userId })
   revalidatePath('/')
-  revalidatePath(`/sites/${id}`)
-  return { id, name: trimmedName }
+  return { id, name: trimmedName, accountName: trimmedName, customerSuffix: null, webAddress: null, loggedAt, loggedBy: userId }
 }

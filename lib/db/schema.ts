@@ -38,7 +38,7 @@ export const activities = pgTable('activities', {
 })
 
 export const sites = pgTable('sites', {
-  id: text('id').primaryKey(), userId: text('userId').notNull(), name: text('name').notNull(), createdAt: timestamp('createdAt').notNull().defaultNow(),
+  id: text('id').primaryKey(), userId: text('userId').notNull(), name: text('name').notNull(), accountName: text('accountName'), customerSuffix: text('customerSuffix'), webAddress: text('webAddress'), loggedAt: timestamp('loggedAt'), loggedBy: text('loggedBy'), createdAt: timestamp('createdAt').notNull().defaultNow(),
 })
 
 export type Role = 'standard_user' | 'ipad_user' | 'administrator' | 'system_admin'
