@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { CircleHelp, LayoutDashboard, Menu, Settings, Users, X } from 'lucide-react'
+import { ChevronDown, CircleHelp, LayoutDashboard, Menu, Settings, Users, X } from 'lucide-react'
 import { SignOutButton } from '@/components/auth-form'
 
 const nav = [
@@ -19,6 +19,7 @@ type CrmDashboardProps = {
 export default function CrmDashboard({ currentUserName, currentUserEmail, currentUserRole }: CrmDashboardProps) {
   const [active, setActive] = useState('Dashboard')
   const [mobileOpen, setMobileOpen] = useState(false)
+  const [accountOpen, setAccountOpen] = useState(false)
   const userInitials = currentUserName
     .split(/\s+/)
     .map((part) => part[0])
@@ -60,6 +61,29 @@ export default function CrmDashboard({ currentUserName, currentUserEmail, curren
         <header className="flex h-20 items-center justify-between border-b border-[#dfe5df] bg-[#fbfcfa]/80 px-5 backdrop-blur md:px-10">
           <button onClick={() => setMobileOpen(true)} className="lg:hidden" aria-label="Open navigation"><Menu size={22} /></button>
           <div className="flex items-center gap-2 text-sm text-[#7a8780]"><span>Workspace</span><span aria-hidden="true">/</span><span className="font-medium text-[#1b2621]">Dashboard</span></div>
+          <div className="relative">
+            <button
+              type="button"
+              onClick={() => setAccountOpen((open) => !open)}
+              aria-expanded={accountOpen}
+              aria-haspopup="menu"
+              aria-label="Open account menu"
+              className="flex items-center gap-2 rounded-full p-1.5 transition hover:bg-[#e7f0f7] focus:outline-none focus:ring-2 focus:ring-[#0f5993]/30"
+            >
+              <span className="flex size-9 items-center justify-center rounded-full bg-[#dcebf5] text-xs font-semibold text-[#0f5993]">{userInitials}</span>
+              <ChevronDown size={16} className={`text-[#6f8493] transition-transform ${accountOpen ? 'rotate-180' : ''}`} aria-hidden="true" />
+            </button>
+            {accountOpen && (
+              <div role="menu" className="absolute right-0 top-12 z-30 w-64 rounded-xl border border-[#dfe5df] bg-white p-2 shadow-[0_12px_30px_rgba(15,89,147,0.12)]">
+                <div className="border-b border-[#eef1ee] px-3 py-2">
+                  <p className="truncate text-sm font-semibold text-[#1b2621]">{currentUserName}</p>
+                  <p className="truncate text-xs text-[#7a8780]">{currentUserEmail}</p>
+                </div>
+                <div className="px-3 py-2 text-xs font-medium text-[#6f8493]">{currentUserRole || 'User'}</div>
+                <SignOutButton className="w-full rounded-lg px-3 py-2 text-left text-sm font-medium text-[#6f8493] transition hover:bg-[#e7f0f7] hover:text-[#0f5993]" />
+              </div>
+            )}
+          </div>
         </header>
         <div className="mx-auto max-w-[1440px] px-5 py-8 md:px-10 md:py-10">
           <p className="text-sm font-medium text-[#6f8493]">Wednesday, October 8, 2026</p>
