@@ -37,7 +37,7 @@ export const activities = pgTable('activities', {
   id: integer('id').primaryKey().generatedAlwaysAsIdentity(), userId: text('userId').notNull(), contactId: integer('contactId').notNull(), type: text('type').notNull(), note: text('note').notNull(), createdAt: timestamp('createdAt').notNull().defaultNow(),
 })
 
-export const sites = pgTable('sites', {
+export const customers = pgTable('customers', {
   id: text('id').primaryKey(), userId: text('userId').notNull(), name: text('name').notNull(), accountName: text('accountName'), customerSuffix: text('customerSuffix'), webAddress: text('webAddress'), loggedAt: timestamp('loggedAt'), loggedBy: text('loggedBy'), createdAt: timestamp('createdAt').notNull().defaultNow(),
 })
 

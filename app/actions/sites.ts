@@ -2,7 +2,7 @@
 
 import { auth } from '@/lib/auth'
 import { db } from '@/lib/db'
-import { sites } from '@/lib/db/schema'
+import { customers } from '@/lib/db/schema'
 import { headers } from 'next/headers'
 import { revalidatePath } from 'next/cache'
 import { and, desc, eq } from 'drizzle-orm'
@@ -16,7 +16,7 @@ async function getCurrentUser() {
 export async function getSites() {
   const user = await getCurrentUser()
   const userId = user.id
-  return db.select({ id: sites.id, name: sites.name, accountName: sites.accountName, customerSuffix: sites.customerSuffix, webAddress: sites.webAddress, loggedAt: sites.loggedAt, loggedBy: sites.loggedBy }).from(sites).where(eq(sites.userId, userId)).orderBy(desc(sites.createdAt))
+  return db.select({ id: customers.id, name: customers.name, accountName: customers.accountName, customerSuffix: customers.customerSuffix, webAddress: customers.webAddress, loggedAt: customers.loggedAt, loggedBy: customers.loggedBy }).from(sites).where(eq(customers.userId, userId)).orderBy(desc(customers.createdAt))
 }
 
 export async function updateSite(id: string, values: { name: string; accountName: string; customerSuffix: string; webAddress: string }) {
@@ -24,7 +24,7 @@ export async function updateSite(id: string, values: { name: string; accountName
   const userId = user.id
   const name = values.name.trim()
   if (!name || name.length > 160) throw new Error('Enter a site name up to 160 characters.')
-  const [site] = await db.update(sites).set({ name, accountName: values.accountName.trim() || name, customerSuffix: values.customerSuffix.trim() || null, webAddress: values.webAddress.trim() || null }).where(and(eq(sites.id, id), eq(sites.userId, userId))).returning({ id: sites.id, name: sites.name, accountName: sites.accountName, customerSuffix: sites.customerSuffix, webAddress: sites.webAddress, loggedAt: sites.loggedAt, loggedBy: sites.loggedBy })
+  const [site] = await db.update(sites).set({ name, accountName: values.accountName.trim() || name, customerSuffix: values.customerSuffix.trim() || null, webAddress: values.webAddress.trim() || null }).where(and(eq(customers.id, id), eq(customers.userId, userId))).returning({ id: customers.id, name: customers.name, accountName: customers.accountName, customerSuffix: customers.customerSuffix, webAddress: customers.webAddress, loggedAt: customers.loggedAt, loggedBy: customers.loggedBy })
   if (!site) throw new Error('Site not found.')
   revalidatePath('/')
   return site

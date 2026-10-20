@@ -8,7 +8,7 @@ import SitesTable from '@/components/sites-table'
 
 const nav = [
   { label: 'Dashboard', icon: LayoutDashboard },
-  { label: 'Sites', icon: Building2 },
+  { label: 'Customers', icon: Building2 },
 ]
 
 type Site = { id: string; name: string }
@@ -110,7 +110,7 @@ export default function CrmDashboard({ currentUserId, currentUserName, currentUs
           </div>
         </header>
         <div className="mx-auto max-w-[1440px] px-5 py-8 md:px-10 md:py-10">
-          {active === 'Users' ? <UserManagement currentUserId={currentUserId} /> : active === 'Sites' ? <SitesTable initialSites={sites} /> : <><p className="text-sm font-medium text-[#6f8493]">Wednesday, October 8, 2026</p><h1 className="mt-2 font-serif text-4xl tracking-tight md:text-5xl">{greeting}, {currentUserName.split(' ')[0]}<span className="text-[#c48b4d">.</span></h1></>}
+          {active === 'Users' ? <UserManagement currentUserId={currentUserId} /> : active === 'Customers' ? <SitesTable initialSites={sites} /> : <><p className="text-sm font-medium text-[#6f8493]">Wednesday, October 8, 2026</p><h1 className="mt-2 font-serif text-4xl tracking-tight md:text-5xl">{greeting}, {currentUserName.split(' ')[0]}<span className="text-[#c48b4d">.</span></h1></>}
         </div>
       </main>
     </div>
