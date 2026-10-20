@@ -30,7 +30,7 @@ export const verification = pgTable('verification', {
 })
 
 export const contacts = pgTable('contacts', {
-  id: integer('id').primaryKey().generatedAlwaysAsIdentity(), userId: text('userId').notNull(), name: text('name').notNull(), company: text('company').notNull(), email: text('email').notNull(), phone: text('phone'), status: text('status').notNull().default('New'), lastContactedAt: timestamp('lastContactedAt'), createdAt: timestamp('createdAt').notNull().defaultNow(),
+  id: integer('id').primaryKey().generatedAlwaysAsIdentity(), userId: text('userId').notNull(), siteId: text('siteId'), name: text('name').notNull(), company: text('company').notNull(), email: text('email').notNull(), phone: text('phone'), status: text('status').notNull().default('New'), lastContactedAt: timestamp('lastContactedAt'), createdAt: timestamp('createdAt').notNull().defaultNow(),
 })
 
 export const activities = pgTable('activities', {
