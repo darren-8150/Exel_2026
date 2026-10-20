@@ -1,26 +1,36 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { ChevronDown, CircleHelp, LayoutDashboard, Menu, Settings, Users, X } from 'lucide-react'
+import { Building2, ChevronDown, LayoutDashboard, Menu, Users, X } from 'lucide-react'
 import { SignOutButton } from '@/components/auth-form'
+import UserManagement from '@/components/user-management'
+import SitesTable from '@/components/sites-table'
 
 const nav = [
   { label: 'Dashboard', icon: LayoutDashboard },
-  { label: 'Contacts', icon: Users },
+  { label: 'Customers', icon: Building2 },
 ]
 
+type Site = { id: string; name: string }
 type CrmDashboardProps = {
   currentUserId: string
   currentUserName: string
   currentUserEmail: string
   currentUserRole?: string | null
+  sites: Site[]
 }
 
-export default function CrmDashboard({ currentUserName, currentUserEmail, currentUserRole }: CrmDashboardProps) {
+export default function CrmDashboard({ currentUserId, currentUserName, currentUserEmail, currentUserRole, sites }: CrmDashboardProps) {
   const [active, setActive] = useState('Dashboard')
   const [mobileOpen, setMobileOpen] = useState(false)
   const [accountOpen, setAccountOpen] = useState(false)
+  const [greeting, setGreeting] = useState('Good morning')
   const accountMenuRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const hour = Number(new Intl.DateTimeFormat('en-GB', { hour: 'numeric', hour12: false, timeZone: 'Europe/London' }).format(new Date()))
+    setGreeting(hour < 12 ? 'Good morning' : hour < 18 ? 'Good afternoon' : 'Good evening')
+  }, [])
 
   useEffect(() => {
     if (!accountOpen) return
@@ -58,25 +68,24 @@ export default function CrmDashboard({ currentUserName, currentUserEmail, curren
               </button>
             ))}
           </nav>
-          <p className="mt-10 px-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#7a8780]">Manage</p>
-          <nav className="mt-3 flex flex-col gap-1">
-            <button className="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[#67736c] hover:bg-[#f0f3ef]"><Settings size={18} strokeWidth={1.8} />Settings</button>
-            <button className="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[#67736c] hover:bg-[#f0f3ef]"><CircleHelp size={18} strokeWidth={1.8} />Help center</button>
-          </nav>
+          {currentUserRole === 'system_admin' && (
+            <>
+              <p className="mt-10 px-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#7a8780]">Admin Area</p>
+              <nav className="mt-3 flex flex-col gap-1">
+                <button onClick={() => { setActive('Users'); setMobileOpen(false) }} className={`flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium transition ${active === 'Users' ? 'bg-[#e7f0f7] text-[#0f5993]' : 'text-[#67736c] hover:bg-[#f0f3ef]'}`}><Users size={18} strokeWidth={1.8} />Users</button>
+              </nav>
+            </>
+          )}
         </div>
         <div className="border-t border-[#dfe5df] pt-5">
-          <div className="flex items-center gap-3">
-            <div className="flex size-9 items-center justify-center rounded-full bg-[#dce2f0] text-xs font-semibold text-[#405275]">{userInitials}</div>
-            <div className="min-w-0 flex-1"><p className="truncate text-sm font-semibold">{currentUserName}</p><p className="truncate text-xs text-[#7a8780]">{currentUserEmail}</p></div>
-            <SignOutButton />
-          </div>
+          <p className="px-3 text-center text-xs font-medium tracking-wide text-[#7a8780]">Powered by <span className="font-semibold text-[#0f5993]">Discover V3.1</span></p>
         </div>
       </aside>
       <main className="lg:pl-64">
         <header className="flex h-20 items-center justify-between border-b border-[#dfe5df] bg-[#fbfcfa]/80 px-5 backdrop-blur md:px-10">
           <button onClick={() => setMobileOpen(true)} className="lg:hidden" aria-label="Open navigation"><Menu size={22} /></button>
-          <div className="flex items-center gap-2 text-sm text-[#7a8780]"><span>Workspace</span><span aria-hidden="true">/</span><span className="font-medium text-[#1b2621]">Dashboard</span></div>
-          <div className="relative">
+          <div className="flex items-center gap-2 text-sm text-[#7a8780]"><span>Workspace</span><span aria-hidden="true">/</span><span className="font-medium text-[#1b2621]">{active}</span></div>
+          <div ref={accountMenuRef} className="relative">
             <button
               type="button"
               onClick={() => setAccountOpen((open) => !open)}
@@ -101,8 +110,7 @@ export default function CrmDashboard({ currentUserName, currentUserEmail, curren
           </div>
         </header>
         <div className="mx-auto max-w-[1440px] px-5 py-8 md:px-10 md:py-10">
-          <p className="text-sm font-medium text-[#6f8493]">Wednesday, October 8, 2026</p>
-          <h1 className="mt-2 font-serif text-4xl tracking-tight md:text-5xl">Good morning, {currentUserName.split(' ')[0]}<span className="text-[#c48b4d">.</span></h1>
+          {active === 'Users' ? <UserManagement currentUserId={currentUserId} /> : active === 'Customers' ? <SitesTable initialSites={sites} /> : <><p className="text-sm font-medium text-[#6f8493]">Wednesday, October 8, 2026</p><h1 className="mt-2 font-serif text-4xl tracking-tight md:text-5xl">{greeting}, {currentUserName.split(' ')[0]}<span className="text-[#c48b4d">.</span></h1></>}
         </div>
       </main>
     </div>

@@ -30,11 +30,23 @@ export const verification = pgTable('verification', {
 })
 
 export const contacts = pgTable('contacts', {
-  id: integer('id').primaryKey().generatedAlwaysAsIdentity(), userId: text('userId').notNull(), name: text('name').notNull(), company: text('company').notNull(), email: text('email').notNull(), phone: text('phone'), status: text('status').notNull().default('New'), lastContactedAt: timestamp('lastContactedAt'), createdAt: timestamp('createdAt').notNull().defaultNow(),
+  id: integer('id').primaryKey().generatedAlwaysAsIdentity(), userId: text('userId').notNull(), siteId: text('siteId'), name: text('name').notNull(), company: text('company').notNull(), email: text('email').notNull(), phone: text('phone'), status: text('status').notNull().default('New'), lastContactedAt: timestamp('lastContactedAt'), createdAt: timestamp('createdAt').notNull().defaultNow(),
 })
 
 export const activities = pgTable('activities', {
   id: integer('id').primaryKey().generatedAlwaysAsIdentity(), userId: text('userId').notNull(), contactId: integer('contactId').notNull(), type: text('type').notNull(), note: text('note').notNull(), createdAt: timestamp('createdAt').notNull().defaultNow(),
+})
+
+export const customers = pgTable('customers', {
+  id: text('id').primaryKey(), userId: text('userId').notNull(), name: text('name').notNull(), accountName: text('accountName'), customerSuffix: text('customerSuffix'), webAddress: text('webAddress'), loggedAt: timestamp('loggedAt'), loggedBy: text('loggedBy'), createdAt: timestamp('createdAt').notNull().defaultNow(),
+})
+
+export const billingAddresses = pgTable('billing_addresses', {
+  id: text('id').primaryKey(), userId: text('userId').notNull(), siteId: text('siteId').notNull(), address: text('address').notNull(), city: text('city').notNull(), postcode: text('postcode').notNull(), country: text('country').notNull(), createdAt: timestamp('createdAt').notNull().defaultNow(),
+})
+
+export const siteAddresses = pgTable('site_address', {
+  id: text('id').primaryKey(), userId: text('userId').notNull(), siteId: text('siteId').notNull(), address: text('address').notNull(), city: text('city').notNull(), postcode: text('postcode').notNull(), country: text('country').notNull(), createdAt: timestamp('createdAt').notNull().defaultNow(),
 })
 
 export type Role = 'standard_user' | 'ipad_user' | 'administrator' | 'system_admin'
