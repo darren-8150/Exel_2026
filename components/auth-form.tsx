@@ -30,8 +30,8 @@ export function AuthForm() {
   </form>
 }
 
-export function SignOutButton() {
-  return <button onClick={() => authClient.signOut({ fetchOptions: { onSuccess: () => window.location.assign('/sign-in') } })} aria-label="Sign out" className="text-[#7a8780] hover:text-[#225b4a]">Sign out</button>
+export function SignOutButton({ className = 'text-[#7a8780] hover:text-[#225b4a]' }: { className?: string }) {
+  return <button onClick={() => authClient.signOut({ fetchOptions: { onSuccess: () => window.location.assign('/sign-in') } })} aria-label="Sign out" className={className}>Sign out</button>
 }
 
 export function SignUpForm() {
