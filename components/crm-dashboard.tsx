@@ -11,14 +11,16 @@ const nav = [
   { label: 'Sites', icon: Building2 },
 ]
 
+type Site = { id: string; name: string }
 type CrmDashboardProps = {
   currentUserId: string
   currentUserName: string
   currentUserEmail: string
   currentUserRole?: string | null
+  sites: Site[]
 }
 
-export default function CrmDashboard({ currentUserId, currentUserName, currentUserEmail, currentUserRole }: CrmDashboardProps) {
+export default function CrmDashboard({ currentUserId, currentUserName, currentUserEmail, currentUserRole, sites }: CrmDashboardProps) {
   const [active, setActive] = useState('Dashboard')
   const [mobileOpen, setMobileOpen] = useState(false)
   const [accountOpen, setAccountOpen] = useState(false)
@@ -102,7 +104,7 @@ export default function CrmDashboard({ currentUserId, currentUserName, currentUs
           </div>
         </header>
         <div className="mx-auto max-w-[1440px] px-5 py-8 md:px-10 md:py-10">
-          {active === 'Users' ? <UserManagement currentUserId={currentUserId} /> : active === 'Sites' ? <SitesTable /> : <><p className="text-sm font-medium text-[#6f8493]">Wednesday, October 8, 2026</p><h1 className="mt-2 font-serif text-4xl tracking-tight md:text-5xl">Good morning, {currentUserName.split(' ')[0]}<span className="text-[#c48b4d">.</span></h1></>}
+          {active === 'Users' ? <UserManagement currentUserId={currentUserId} /> : active === 'Sites' ? <SitesTable initialSites={sites} /> : <><p className="text-sm font-medium text-[#6f8493]">Wednesday, October 8, 2026</p><h1 className="mt-2 font-serif text-4xl tracking-tight md:text-5xl">Good morning, {currentUserName.split(' ')[0]}<span className="text-[#c48b4d">.</span></h1></>}
         </div>
       </main>
     </div>

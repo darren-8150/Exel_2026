@@ -37,6 +37,10 @@ export const activities = pgTable('activities', {
   id: integer('id').primaryKey().generatedAlwaysAsIdentity(), userId: text('userId').notNull(), contactId: integer('contactId').notNull(), type: text('type').notNull(), note: text('note').notNull(), createdAt: timestamp('createdAt').notNull().defaultNow(),
 })
 
+export const sites = pgTable('sites', {
+  id: text('id').primaryKey(), userId: text('userId').notNull(), name: text('name').notNull(), createdAt: timestamp('createdAt').notNull().defaultNow(),
+})
+
 export type Role = 'standard_user' | 'ipad_user' | 'administrator' | 'system_admin'
 export const roles: { value: Role; label: string }[] = [
   { value: 'standard_user', label: 'Standard user' }, { value: 'ipad_user', label: 'iPad user' }, { value: 'administrator', label: 'Administrator' }, { value: 'system_admin', label: 'System admin' },
