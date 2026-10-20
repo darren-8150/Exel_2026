@@ -45,6 +45,10 @@ export const billingAddresses = pgTable('billing_addresses', {
   id: text('id').primaryKey(), userId: text('userId').notNull(), siteId: text('siteId').notNull(), address: text('address').notNull(), city: text('city').notNull(), postcode: text('postcode').notNull(), country: text('country').notNull(), createdAt: timestamp('createdAt').notNull().defaultNow(),
 })
 
+export const siteAddresses = pgTable('site_address', {
+  id: text('id').primaryKey(), userId: text('userId').notNull(), siteId: text('siteId').notNull(), address: text('address').notNull(), city: text('city').notNull(), postcode: text('postcode').notNull(), country: text('country').notNull(), createdAt: timestamp('createdAt').notNull().defaultNow(),
+})
+
 export type Role = 'standard_user' | 'ipad_user' | 'administrator' | 'system_admin'
 export const roles: { value: Role; label: string }[] = [
   { value: 'standard_user', label: 'Standard user' }, { value: 'ipad_user', label: 'iPad user' }, { value: 'administrator', label: 'Administrator' }, { value: 'system_admin', label: 'System admin' },
