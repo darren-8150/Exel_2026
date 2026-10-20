@@ -17,6 +17,7 @@ export default function SitesTable({ initialSites }: { initialSites: Site[] }) {
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
   const [selectedSite, setSelectedSite] = useState<Site | null>(null)
+  const [detailTab, setDetailTab] = useState<'Details' | 'Contacts' | 'Billing Address'>('Details')
 
   const filteredSites = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase()
@@ -49,7 +50,8 @@ export default function SitesTable({ initialSites }: { initialSites: Site[] }) {
   }
 
   if (selectedSite) {
-    return <section aria-labelledby="site-detail-title"><button type="button" onClick={() => setSelectedSite(null)} className="text-sm font-semibold text-[#0f5993] hover:underline">← Back to Sites</button><div className="mt-8 rounded-lg border border-[#d9e2e9] bg-white p-6 shadow-sm"><p className="text-xs font-semibold uppercase tracking-wider text-[#6f8493]">Site</p><h1 id="site-detail-title" className="mt-2 font-serif text-4xl tracking-tight">{selectedSite.name}</h1></div></section>
+    const tabs = ['Details', 'Contacts', 'Billing Address'] as const
+    return <section aria-labelledby="site-detail-title"><button type="button" onClick={() => { setSelectedSite(null); setDetailTab('Details') }} className="text-sm font-semibold text-[#0f5993] hover:underline">← Back to Sites</button><div className="mt-6 overflow-hidden rounded-lg border border-[#d9e2e9] bg-white shadow-sm"><div className="border-b border-[#d9e2e9] px-5 pt-5"><p className="text-xs font-semibold uppercase tracking-wider text-[#6f8493]">Site</p><h1 id="site-detail-title" className="mt-2 font-serif text-4xl tracking-tight">{selectedSite.name}</h1><div role="tablist" aria-label="Site details" className="mt-6 flex gap-6 overflow-x-auto">{tabs.map((tab) => <button key={tab} type="button" role="tab" aria-selected={detailTab === tab} onClick={() => setDetailTab(tab)} className={`border-b-2 px-1 pb-3 text-sm font-semibold transition ${detailTab === tab ? 'border-[#0f5993] text-[#0f5993]' : 'border-transparent text-[#6f8493] hover:border-[#b8cbd8] hover:text-[#29404f]'}`}>{tab}</button>)}</div></div><div className="min-h-48 p-5"><h2 className="text-lg font-semibold text-[#29404f]">{detailTab}</h2><p className="mt-2 text-sm leading-6 text-[#6f8493]">{detailTab === 'Details' ? 'Site details will appear here.' : detailTab === 'Contacts' ? 'Contacts for this site will appear here.' : 'Billing address information will appear here.'}</p></div></div></section>
   }
 
   return <section aria-labelledby="sites-title">
