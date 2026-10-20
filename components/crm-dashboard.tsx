@@ -76,7 +76,7 @@ export default function CrmDashboard({ currentUserName, currentUserEmail, curren
         <header className="flex h-20 items-center justify-between border-b border-[#dfe5df] bg-[#fbfcfa]/80 px-5 backdrop-blur md:px-10">
           <button onClick={() => setMobileOpen(true)} className="lg:hidden" aria-label="Open navigation"><Menu size={22} /></button>
           <div className="flex items-center gap-2 text-sm text-[#7a8780]"><span>Workspace</span><span aria-hidden="true">/</span><span className="font-medium text-[#1b2621]">Dashboard</span></div>
-          <div className="relative">
+          <div ref={accountMenuRef} className="relative">
             <button
               type="button"
               onClick={() => setAccountOpen((open) => !open)}
