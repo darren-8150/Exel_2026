@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { ChevronDown, LayoutDashboard, Menu, Users, X } from 'lucide-react'
 import { SignOutButton } from '@/components/auth-form'
+import UserManagement from '@/components/user-management'
 
 const nav = [
   { label: 'Dashboard', icon: LayoutDashboard },
@@ -16,7 +17,7 @@ type CrmDashboardProps = {
   currentUserRole?: string | null
 }
 
-export default function CrmDashboard({ currentUserName, currentUserEmail, currentUserRole }: CrmDashboardProps) {
+export default function CrmDashboard({ currentUserId, currentUserName, currentUserEmail, currentUserRole }: CrmDashboardProps) {
   const [active, setActive] = useState('Dashboard')
   const [mobileOpen, setMobileOpen] = useState(false)
   const [accountOpen, setAccountOpen] = useState(false)
@@ -60,7 +61,7 @@ export default function CrmDashboard({ currentUserName, currentUserEmail, curren
           </nav>
           <p className="mt-10 px-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#7a8780]">Admin Area</p>
           <nav className="mt-3 flex flex-col gap-1">
-            <button className="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[#67736c] hover:bg-[#f0f3ef]"><Users size={18} strokeWidth={1.8} />Users</button>
+            <button onClick={() => { setActive('Users'); setMobileOpen(false) }} className={`flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium transition ${active === 'Users' ? 'bg-[#e7f0f7] text-[#0f5993]' : 'text-[#67736c] hover:bg-[#f0f3ef]'}`}><Users size={18} strokeWidth={1.8} />Users</button>
           </nav>
         </div>
         <div className="border-t border-[#dfe5df] pt-5">
@@ -70,7 +71,7 @@ export default function CrmDashboard({ currentUserName, currentUserEmail, curren
       <main className="lg:pl-64">
         <header className="flex h-20 items-center justify-between border-b border-[#dfe5df] bg-[#fbfcfa]/80 px-5 backdrop-blur md:px-10">
           <button onClick={() => setMobileOpen(true)} className="lg:hidden" aria-label="Open navigation"><Menu size={22} /></button>
-          <div className="flex items-center gap-2 text-sm text-[#7a8780]"><span>Workspace</span><span aria-hidden="true">/</span><span className="font-medium text-[#1b2621]">Dashboard</span></div>
+          <div className="flex items-center gap-2 text-sm text-[#7a8780]"><span>Workspace</span><span aria-hidden="true">/</span><span className="font-medium text-[#1b2621]">{active}</span></div>
           <div ref={accountMenuRef} className="relative">
             <button
               type="button"
@@ -96,8 +97,7 @@ export default function CrmDashboard({ currentUserName, currentUserEmail, curren
           </div>
         </header>
         <div className="mx-auto max-w-[1440px] px-5 py-8 md:px-10 md:py-10">
-          <p className="text-sm font-medium text-[#6f8493]">Wednesday, October 8, 2026</p>
-          <h1 className="mt-2 font-serif text-4xl tracking-tight md:text-5xl">Good morning, {currentUserName.split(' ')[0]}<span className="text-[#c48b4d">.</span></h1>
+          {active === 'Users' ? <UserManagement currentUserId={currentUserId} /> : <><p className="text-sm font-medium text-[#6f8493]">Wednesday, October 8, 2026</p><h1 className="mt-2 font-serif text-4xl tracking-tight md:text-5xl">Good morning, {currentUserName.split(' ')[0]}<span className="text-[#c48b4d">.</span></h1></>}
         </div>
       </main>
     </div>
