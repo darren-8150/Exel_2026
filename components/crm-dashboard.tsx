@@ -1,13 +1,13 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { ChevronDown, LayoutDashboard, Menu, Users, X } from 'lucide-react'
+import { Building2, ChevronDown, LayoutDashboard, Menu, Users, X } from 'lucide-react'
 import { SignOutButton } from '@/components/auth-form'
 import UserManagement from '@/components/user-management'
 
 const nav = [
   { label: 'Dashboard', icon: LayoutDashboard },
-  { label: 'Contacts', icon: Users },
+  { label: 'Sites', icon: Building2 },
 ]
 
 type CrmDashboardProps = {
