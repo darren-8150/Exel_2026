@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { ChevronDown, CircleHelp, LayoutDashboard, Menu, Settings, Users, X } from 'lucide-react'
 import { SignOutButton } from '@/components/auth-form'
 
@@ -20,6 +20,21 @@ export default function CrmDashboard({ currentUserName, currentUserEmail, curren
   const [active, setActive] = useState('Dashboard')
   const [mobileOpen, setMobileOpen] = useState(false)
   const [accountOpen, setAccountOpen] = useState(false)
+  const accountMenuRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (!accountOpen) return
+
+    const handlePointerDown = (event: PointerEvent) => {
+      if (accountMenuRef.current && !accountMenuRef.current.contains(event.target as Node)) {
+        setAccountOpen(false)
+      }
+    }
+
+    document.addEventListener('pointerdown', handlePointerDown)
+    return () => document.removeEventListener('pointerdown', handlePointerDown)
+  }, [accountOpen])
+
   const userInitials = currentUserName
     .split(/\s+/)
     .map((part) => part[0])
