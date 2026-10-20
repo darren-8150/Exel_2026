@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { CircleHelp, LayoutDashboard, Menu, Users, X } from 'lucide-react'
+import { CircleHelp, LayoutDashboard, Menu, Settings, Users, X } from 'lucide-react'
 import { SignOutButton } from '@/components/auth-form'
 
 const nav = [
