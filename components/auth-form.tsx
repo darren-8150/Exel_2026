@@ -31,7 +31,17 @@ export function AuthForm() {
 }
 
 export function SignOutButton({ className = 'text-[#7a8780] hover:text-[#225b4a]' }: { className?: string }) {
-  return <button onClick={() => authClient.signOut({ fetchOptions: { onSuccess: () => window.location.assign('/sign-in') } })} aria-label="Sign out" className={className}>Sign out</button>
+  const [loading, setLoading] = useState(false)
+
+  async function handleSignOut() {
+    if (loading) return
+    setLoading(true)
+    await authClient.signOut({ fetchOptions: { onSuccess: () => window.location.assign('/sign-in') } })
+  }
+
+  return <button type="button" onClick={handleSignOut} disabled={loading} aria-label="Sign out" aria-busy={loading} className={`${className} disabled:cursor-not-allowed disabled:opacity-70`}>
+    {loading ? <span className="flex items-center gap-2"><span aria-hidden="true" className="size-3 animate-spin rounded-full border-2 border-current border-r-transparent" />Signing out…</span> : 'Sign out'}
+  </button>
 }
 
 export function SignUpForm() {
