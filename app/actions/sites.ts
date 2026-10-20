@@ -7,19 +7,21 @@ import { headers } from 'next/headers'
 import { revalidatePath } from 'next/cache'
 import { and, desc, eq } from 'drizzle-orm'
 
-async function getUserId() {
+async function getCurrentUser() {
   const session = await auth.api.getSession({ headers: await headers() })
   if (!session?.user) throw new Error('Unauthorized')
-  return session.user.id
+  return { id: session.user.id, name: session.user.name }
 }
 
 export async function getSites() {
-  const userId = await getUserId()
+  const user = await getCurrentUser()
+  const userId = user.id
   return db.select({ id: sites.id, name: sites.name, accountName: sites.accountName, customerSuffix: sites.customerSuffix, webAddress: sites.webAddress, loggedAt: sites.loggedAt, loggedBy: sites.loggedBy }).from(sites).where(eq(sites.userId, userId)).orderBy(desc(sites.createdAt))
 }
 
 export async function updateSite(id: string, values: { name: string; accountName: string; customerSuffix: string; webAddress: string }) {
-  const userId = await getUserId()
+  const user = await getCurrentUser()
+  const userId = user.id
   const name = values.name.trim()
   if (!name || name.length > 160) throw new Error('Enter a site name up to 160 characters.')
   const [site] = await db.update(sites).set({ name, accountName: values.accountName.trim() || name, customerSuffix: values.customerSuffix.trim() || null, webAddress: values.webAddress.trim() || null }).where(and(eq(sites.id, id), eq(sites.userId, userId))).returning({ id: sites.id, name: sites.name, accountName: sites.accountName, customerSuffix: sites.customerSuffix, webAddress: sites.webAddress, loggedAt: sites.loggedAt, loggedBy: sites.loggedBy })
@@ -29,12 +31,13 @@ export async function updateSite(id: string, values: { name: string; accountName
 }
 
 export async function createSite(name: string) {
-  const userId = await getUserId()
+  const user = await getCurrentUser()
+  const userId = user.id
   const trimmedName = name.trim()
   if (!trimmedName || trimmedName.length > 160) throw new Error('Enter a site name up to 160 characters.')
   const id = crypto.randomUUID()
   const loggedAt = new Date()
-  await db.insert(sites).values({ id, userId, name: trimmedName, accountName: trimmedName, loggedAt, loggedBy: userId })
+  await db.insert(sites).values({ id, userId, name: trimmedName, accountName: trimmedName, loggedAt, loggedBy: user.name || user.id })
   revalidatePath('/')
-  return { id, name: trimmedName, accountName: trimmedName, customerSuffix: null, webAddress: null, loggedAt, loggedBy: userId }
+  return { id, name: trimmedName, accountName: trimmedName, customerSuffix: null, webAddress: null, loggedAt, loggedBy: user.name || user.id }
 }
