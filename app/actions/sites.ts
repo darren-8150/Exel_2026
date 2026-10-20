@@ -5,7 +5,7 @@ import { db } from '@/lib/db'
 import { sites } from '@/lib/db/schema'
 import { headers } from 'next/headers'
 import { revalidatePath } from 'next/cache'
-import { desc, eq } from 'drizzle-orm'
+import { and, desc, eq } from 'drizzle-orm'
 
 async function getUserId() {
   const session = await auth.api.getSession({ headers: await headers() })
