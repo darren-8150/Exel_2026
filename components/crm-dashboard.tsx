@@ -65,11 +65,7 @@ export default function CrmDashboard({ currentUserName, currentUserEmail, curren
           </nav>
         </div>
         <div className="border-t border-[#dfe5df] pt-5">
-          <div className="flex items-center gap-3">
-            <div className="flex size-9 items-center justify-center rounded-full bg-[#dce2f0] text-xs font-semibold text-[#405275]">{userInitials}</div>
-            <div className="min-w-0 flex-1"><p className="truncate text-sm font-semibold">{currentUserName}</p><p className="truncate text-xs text-[#7a8780]">{currentUserEmail}</p></div>
-            <SignOutButton />
-          </div>
+          <p className="px-3 text-center text-xs font-medium tracking-wide text-[#7a8780]">Powered by <span className="font-semibold text-[#0f5993]">Discover V3</span></p>
         </div>
       </aside>
       <main className="lg:pl-64">
