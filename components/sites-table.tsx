@@ -81,7 +81,7 @@ export default function SitesTable({ initialSites }: { initialSites: Site[] }) {
 
   async function handleCreateSite(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault(); setSaving(true)
-    try { const site = await createSite(siteName); setSites((current) => [site, ...current]); setSiteName(''); setShowSiteForm(false) } finally { setSaving(false) }
+    try { const site = await createSite(siteName); setSites((current) => [site, ...current]); setSiteName(''); setShowSiteForm(false); setSelectedSite(site); setTab('Details'); setEditFields({ name: site.name, accountName: site.accountName || site.name, customerSuffix: site.customerSuffix || '', webAddress: site.webAddress || '' }); setShowEditForm(true) } finally { setSaving(false) }
   }
 
   if (selectedSite) return <section aria-labelledby="site-detail-title">
