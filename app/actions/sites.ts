@@ -18,6 +18,16 @@ export async function getSites() {
   return db.select({ id: sites.id, name: sites.name, accountName: sites.accountName, customerSuffix: sites.customerSuffix, webAddress: sites.webAddress, loggedAt: sites.loggedAt, loggedBy: sites.loggedBy }).from(sites).where(eq(sites.userId, userId)).orderBy(desc(sites.createdAt))
 }
 
+export async function updateSite(id: string, values: { name: string; accountName: string; customerSuffix: string; webAddress: string }) {
+  const userId = await getUserId()
+  const name = values.name.trim()
+  if (!name || name.length > 160) throw new Error('Enter a site name up to 160 characters.')
+  const [site] = await db.update(sites).set({ name, accountName: values.accountName.trim() || name, customerSuffix: values.customerSuffix.trim() || null, webAddress: values.webAddress.trim() || null }).where(and(eq(sites.id, id), eq(sites.userId, userId))).returning({ id: sites.id, name: sites.name, accountName: sites.accountName, customerSuffix: sites.customerSuffix, webAddress: sites.webAddress, loggedAt: sites.loggedAt, loggedBy: sites.loggedBy })
+  if (!site) throw new Error('Site not found.')
+  revalidatePath('/')
+  return site
+}
+
 export async function createSite(name: string) {
   const userId = await getUserId()
   const trimmedName = name.trim()
