@@ -59,10 +59,14 @@ export default function CrmDashboard({ currentUserId, currentUserName, currentUs
               </button>
             ))}
           </nav>
-          <p className="mt-10 px-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#7a8780]">Admin Area</p>
-          <nav className="mt-3 flex flex-col gap-1">
-            <button onClick={() => { setActive('Users'); setMobileOpen(false) }} className={`flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium transition ${active === 'Users' ? 'bg-[#e7f0f7] text-[#0f5993]' : 'text-[#67736c] hover:bg-[#f0f3ef]'}`}><Users size={18} strokeWidth={1.8} />Users</button>
-          </nav>
+          {currentUserRole === 'system_admin' && (
+            <>
+              <p className="mt-10 px-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#7a8780]">Admin Area</p>
+              <nav className="mt-3 flex flex-col gap-1">
+                <button onClick={() => { setActive('Users'); setMobileOpen(false) }} className={`flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium transition ${active === 'Users' ? 'bg-[#e7f0f7] text-[#0f5993]' : 'text-[#67736c] hover:bg-[#f0f3ef]'}`}><Users size={18} strokeWidth={1.8} />Users</button>
+              </nav>
+            </>
+          )}
         </div>
         <div className="border-t border-[#dfe5df] pt-5">
           <p className="px-3 text-center text-xs font-medium tracking-wide text-[#7a8780]">Powered by <span className="font-semibold text-[#0f5993]">Discover V3.1</span></p>
