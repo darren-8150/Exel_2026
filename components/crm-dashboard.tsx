@@ -58,7 +58,7 @@ export default function CrmDashboard({ currentUserName, currentUserEmail, curren
               </button>
             ))}
           </nav>
-          <p className="mt-10 px-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#7a8780]">Manage</p>
+          <p className="mt-10 px-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#7a8780]">Admin Area</p>
           <nav className="mt-3 flex flex-col gap-1">
             <button className="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[#67736c] hover:bg-[#f0f3ef]"><Settings size={18} strokeWidth={1.8} />Settings</button>
             <button className="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[#67736c] hover:bg-[#f0f3ef]"><CircleHelp size={18} strokeWidth={1.8} />Help center</button>
