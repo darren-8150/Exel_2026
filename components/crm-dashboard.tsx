@@ -65,7 +65,7 @@ export default function CrmDashboard({ currentUserName, currentUserEmail, curren
           </nav>
         </div>
         <div className="border-t border-[#dfe5df] pt-5">
-          <p className="px-3 text-center text-xs font-medium tracking-wide text-[#7a8780]">Powered by <span className="font-semibold text-[#0f5993]">Discover V3</span></p>
+          <p className="px-3 text-center text-xs font-medium tracking-wide text-[#7a8780]">Powered by <span className="font-semibold text-[#0f5993]">Discover V3.1</span></p>
         </div>
       </aside>
       <main className="lg:pl-64">
