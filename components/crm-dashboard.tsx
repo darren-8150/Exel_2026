@@ -13,7 +13,7 @@ const contacts = [
   { initials: 'TW', name: 'Theo Williams', company: 'Harbor Health', email: 'theo@harborhealth.com', status: 'Active', color: 'bg-[#e8d8d8]' },
 ]
 
-const nav = [{ label: 'Overview', icon: LayoutDashboard }, { label: 'Contacts', icon: Users }, { label: 'Activity', icon: Activity }]
+const nav = [{ label: 'Dashboard', icon: LayoutDashboard }, { label: 'Contacts', icon: Users }, { label: 'Activity', icon: Activity }]
 
 export default function CrmDashboard({ currentUserId, currentUserName, currentUserEmail, currentUserRole }: { currentUserId: string; currentUserName: string; currentUserEmail: string; currentUserRole?: string | null }) {
   const [active, setActive] = useState('Overview')
