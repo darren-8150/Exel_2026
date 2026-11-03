@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { Building2, ChevronDown, LayoutDashboard, Menu, Users, X } from 'lucide-react'
+import { Building2, CheckSquare, ChevronDown, LayoutDashboard, Menu, Users, X } from 'lucide-react'
 import { SignOutButton } from '@/components/auth-form'
 import UserManagement from '@/components/user-management'
 import SitesTable from '@/components/sites-table'
@@ -74,7 +74,7 @@ export default function CrmDashboard({ currentUserId, currentUserName, currentUs
             <>
               <p className="mt-10 px-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#7a8780]">Admin Area</p>
               <nav className="mt-3 flex flex-col gap-1">
-                <button onClick={() => { setActive('Users'); setMobileOpen(false) }} className={`flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium transition ${active === 'Users' ? 'bg-[#e7f0f7] text-[#0f5993]' : 'text-[#67736c] hover:bg-[#f0f3ef]'}`}><Users size={18} strokeWidth={1.8} />Users</button>
+                <button onClick={() => { setActive('Users'); setMobileOpen(false) }} className={`flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium transition ${active === 'Users' ? 'bg-[#e7f0f7] text-[#0f5993]' : 'text-[#67736c] hover:bg-[#f0f3ef]'}`}><Users size={18} strokeWidth={1.8} />Users</button><button onClick={() => { setActive('Suppliers Checks'); setMobileOpen(false) }} className={`flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium transition ${active === 'Suppliers Checks' ? 'bg-[#e7f0f7] text-[#0f5993]' : 'text-[#67736c] hover:bg-[#f0f3ef]'}`}><CheckSquare size={18} strokeWidth={1.8} />Suppliers Checks</button>
               </nav>
             </>
           )}
@@ -112,7 +112,7 @@ export default function CrmDashboard({ currentUserId, currentUserName, currentUs
           </div>
         </header>
         <div className="mx-auto max-w-[1440px] px-5 py-8 md:px-10 md:py-10">
-          {active === 'Users' ? <UserManagement currentUserId={currentUserId} /> : active === 'Customers' ? <SitesTable initialSites={sites} accountManagers={accountManagers} /> : <><p className="text-sm font-medium text-[#6f8493]">Wednesday, October 8, 2026</p><h1 className="mt-2 font-serif text-4xl tracking-tight md:text-5xl">{greeting}, {currentUserName.split(' ')[0]}<span className="text-[#c48b4d">.</span></h1></>}
+          {active === 'Users' ? <UserManagement currentUserId={currentUserId} /> : active === 'Suppliers Checks' ? <section className="rounded-2xl border border-[#dfe5df] bg-white p-6 shadow-[0_12px_30px_rgba(15,89,147,0.06)]"><p className="text-sm font-semibold uppercase tracking-[0.16em] text-[#6f8493]">Admin Area</p><h1 className="mt-2 font-serif text-4xl tracking-tight text-[#1b2621]">Suppliers Checks</h1><p className="mt-3 max-w-2xl leading-6 text-[#6f8493]">Review and manage supplier checks from this section.</p></section> : active === 'Customers' ? <SitesTable initialSites={sites} accountManagers={accountManagers} /> : <><p className="text-sm font-medium text-[#6f8493]">Wednesday, October 8, 2026</p><h1 className="mt-2 font-serif text-4xl tracking-tight md:text-5xl">{greeting}, {currentUserName.split(' ')[0]}<span className="text-[#c48b4d">.</span></h1></>}
         </div>
       </main>
     </div>
