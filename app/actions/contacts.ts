@@ -15,11 +15,11 @@ async function getUserId() {
 export async function createContact(siteId: string, name: string, company: string, email: string) {
   const userId = await getUserId()
   if (!name.trim() || !company.trim() || !email.trim()) throw new Error('Complete all contact fields.')
-  const [contact] = await db.insert(contacts).values({ userId, siteId, name: name.trim(), company: company.trim(), email: email.trim() }).returning({ id: contacts.id, name: contacts.name, company: contacts.company, email: contacts.email, phone: contacts.phone, status: contacts.status })
+  const [contact] = await db.insert(contacts).values({ userId, siteId, name: name.trim(), company: company.trim(), email: email.trim() }).returning({ id: contacts.id, name: contacts.name, company: contacts.company, email: contacts.email, phone: contacts.phone, mobile: contacts.mobile, status: contacts.status })
   return contact
 }
 
 export async function getContactsForSite(siteId: string) {
   const userId = await getUserId()
-  return db.select({ id: contacts.id, name: contacts.name, company: contacts.company, email: contacts.email, phone: contacts.phone, status: contacts.status }).from(contacts).where(and(eq(contacts.userId, userId), eq(contacts.siteId, siteId))).orderBy(asc(contacts.name))
+  return db.select({ id: contacts.id, name: contacts.name, company: contacts.company, email: contacts.email, phone: contacts.phone, mobile: contacts.mobile, status: contacts.status }).from(contacts).where(and(eq(contacts.userId, userId), eq(contacts.siteId, siteId))).orderBy(asc(contacts.name))
 }
