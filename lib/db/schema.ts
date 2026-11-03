@@ -38,7 +38,7 @@ export const activities = pgTable('activities', {
 })
 
 export const customers = pgTable('customers', {
-  id: text('id').primaryKey(), userId: text('userId').notNull(), name: text('name').notNull(), accountName: text('accountName'), customerSuffix: text('customerSuffix'), webAddress: text('webAddress'), loggedAt: timestamp('loggedAt'), loggedBy: text('loggedBy'), createdAt: timestamp('createdAt').notNull().defaultNow(),
+  id: text('id').primaryKey(), userId: text('userId').notNull(), name: text('name').notNull(), accountName: text('accountName'), customerSuffix: text('customerSuffix'), webAddress: text('webAddress'), accountNumber: text('accountNumber'), notes: text('notes'), preferredQuoteMaster: text('preferredQuoteMaster'), preferredInvoiceMaster: text('preferredInvoiceMaster'), loggedAt: timestamp('loggedAt'), loggedBy: text('loggedBy'), createdAt: timestamp('createdAt').notNull().defaultNow(),
 })
 
 export const billingAddresses = pgTable('billing_addresses', {

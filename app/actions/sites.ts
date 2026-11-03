@@ -16,15 +16,15 @@ async function getCurrentUser() {
 export async function getSites() {
   const user = await getCurrentUser()
   const userId = user.id
-  return db.select({ id: customers.id, name: customers.name, accountName: customers.accountName, customerSuffix: customers.customerSuffix, webAddress: customers.webAddress, loggedAt: customers.loggedAt, loggedBy: customers.loggedBy }).from(customers).where(eq(customers.userId, userId)).orderBy(desc(customers.createdAt))
+  return db.select({ id: customers.id, name: customers.name, accountName: customers.accountName, customerSuffix: customers.customerSuffix, webAddress: customers.webAddress, accountNumber: customers.accountNumber, notes: customers.notes, preferredQuoteMaster: customers.preferredQuoteMaster, preferredInvoiceMaster: customers.preferredInvoiceMaster, loggedAt: customers.loggedAt, loggedBy: customers.loggedBy }).from(customers).where(eq(customers.userId, userId)).orderBy(desc(customers.createdAt))
 }
 
-export async function updateSite(id: string, values: { name: string; accountName: string; customerSuffix: string; webAddress: string }) {
+export async function updateSite(id: string, values: { name: string; accountName: string; customerSuffix: string; webAddress: string; accountNumber: string; notes: string; preferredQuoteMaster: string; preferredInvoiceMaster: string }) {
   const user = await getCurrentUser()
   const userId = user.id
   const name = values.name.trim()
   if (!name || name.length > 160) throw new Error('Enter a site name up to 160 characters.')
-  const [site] = await db.update(customers).set({ name, accountName: values.accountName.trim() || name, customerSuffix: values.customerSuffix.trim() || null, webAddress: values.webAddress.trim() || null }).where(and(eq(customers.id, id), eq(customers.userId, userId))).returning({ id: customers.id, name: customers.name, accountName: customers.accountName, customerSuffix: customers.customerSuffix, webAddress: customers.webAddress, loggedAt: customers.loggedAt, loggedBy: customers.loggedBy })
+  const [site] = await db.update(customers).set({ name, accountName: values.accountName.trim() || name, customerSuffix: values.customerSuffix.trim() || null, webAddress: values.webAddress.trim() || null, accountNumber: values.accountNumber.trim() || null, notes: values.notes.trim() || null, preferredQuoteMaster: values.preferredQuoteMaster.trim() || null, preferredInvoiceMaster: values.preferredInvoiceMaster.trim() || null }).where(and(eq(customers.id, id), eq(customers.userId, userId))).returning({ id: customers.id, name: customers.name, accountName: customers.accountName, customerSuffix: customers.customerSuffix, webAddress: customers.webAddress, accountNumber: customers.accountNumber, notes: customers.notes, preferredQuoteMaster: customers.preferredQuoteMaster, preferredInvoiceMaster: customers.preferredInvoiceMaster, loggedAt: customers.loggedAt, loggedBy: customers.loggedBy })
   if (!site) throw new Error('Site not found.')
   revalidatePath('/')
   return site
