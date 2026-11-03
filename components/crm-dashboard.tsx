@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { Building2, CheckSquare, ChevronDown, LayoutDashboard, Menu, Users, X } from 'lucide-react'
+import SuppliersChecks from '@/components/suppliers-checks'
 import { SignOutButton } from '@/components/auth-form'
 import UserManagement from '@/components/user-management'
 import SitesTable from '@/components/sites-table'
@@ -20,9 +21,10 @@ type CrmDashboardProps = {
   currentUserRole?: string | null
   sites: Site[]
   accountManagers: AccountManager[]
+  suppliers: Awaited<ReturnType<typeof import('@/app/actions/suppliers').getSuppliers>>
 }
 
-export default function CrmDashboard({ currentUserId, currentUserName, currentUserEmail, currentUserRole, sites, accountManagers }: CrmDashboardProps) {
+export default function CrmDashboard({ currentUserId, currentUserName, currentUserEmail, currentUserRole, sites, accountManagers, suppliers }: CrmDashboardProps) {
   const [active, setActive] = useState('Dashboard')
   const [mobileOpen, setMobileOpen] = useState(false)
   const [accountOpen, setAccountOpen] = useState(false)
@@ -112,7 +114,7 @@ export default function CrmDashboard({ currentUserId, currentUserName, currentUs
           </div>
         </header>
         <div className="mx-auto max-w-[1440px] px-5 py-8 md:px-10 md:py-10">
-          {active === 'Users' ? <UserManagement currentUserId={currentUserId} /> : active === 'Suppliers Checks' ? <section className="rounded-2xl border border-[#dfe5df] bg-white p-6 shadow-[0_12px_30px_rgba(15,89,147,0.06)]"><p className="text-sm font-semibold uppercase tracking-[0.16em] text-[#6f8493]">Admin Area</p><h1 className="mt-2 font-serif text-4xl tracking-tight text-[#1b2621]">Suppliers Checks</h1><p className="mt-3 max-w-2xl leading-6 text-[#6f8493]">Review and manage supplier checks from this section.</p></section> : active === 'Customers' ? <SitesTable initialSites={sites} accountManagers={accountManagers} /> : <><p className="text-sm font-medium text-[#6f8493]">Wednesday, October 8, 2026</p><h1 className="mt-2 font-serif text-4xl tracking-tight md:text-5xl">{greeting}, {currentUserName.split(' ')[0]}<span className="text-[#c48b4d">.</span></h1></>}
+          {active === 'Users' ? <UserManagement currentUserId={currentUserId} /> : active === 'Suppliers Checks' ? <SuppliersChecks initialData={suppliers} /> : active === 'Customers' ? <SitesTable initialSites={sites} accountManagers={accountManagers} /> : <><p className="text-sm font-medium text-[#6f8493]">Wednesday, October 8, 2026</p><h1 className="mt-2 font-serif text-4xl tracking-tight md:text-5xl">{greeting}, {currentUserName.split(' ')[0]}<span className="text-[#c48b4d">.</span></h1></>}
         </div>
       </main>
     </div>
