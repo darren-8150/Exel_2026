@@ -27,6 +27,11 @@ export async function updateBillingAddress(id: string, values: { companyName: st
   return billingAddress
 }
 
+export async function deleteBillingAddress(id: string) {
+  const userId = await getUserId()
+  await db.delete(billingAddresses).where(and(eq(billingAddresses.id, id), eq(billingAddresses.userId, userId)))
+}
+
 export async function getBillingAddressesForSite(siteId: string) {
   const userId = await getUserId()
   return db.select({ id: billingAddresses.id, address: billingAddresses.address, city: billingAddresses.city, country: billingAddresses.country, companyName: billingAddresses.companyName, buildingName: billingAddresses.buildingName, address1: billingAddresses.address1, address2: billingAddresses.address2, address3: billingAddresses.address3, address4: billingAddresses.address4, postcode: billingAddresses.postcode, county: billingAddresses.county }).from(billingAddresses).where(and(eq(billingAddresses.siteId, siteId), eq(billingAddresses.userId, userId))).orderBy(desc(billingAddresses.createdAt))
