@@ -1,6 +1,9 @@
 'use server'
 
 import { auth, isAdminRole, isAppRole, type AppRole } from '@/lib/auth'
+import { db } from '@/lib/db'
+import { user as userTable } from '@/lib/db/schema'
+import { eq } from 'drizzle-orm'
 import { headers } from 'next/headers'
 
 async function requireAdminSession() {
@@ -14,32 +17,36 @@ export type ManagedUser = {
   name: string
   email: string
   role: AppRole
+  accountManager: boolean
   createdAt: string
 }
 
-function toManagedUser(user: { id: string; name: string; email: string; role?: string | null; createdAt: Date | string }): ManagedUser {
-  return { id: user.id, name: user.name, email: user.email, role: isAppRole(user.role) ? user.role : 'standard_user', createdAt: new Date(user.createdAt).toISOString() }
+function toManagedUser(user: { id: string; name: string; email: string; role?: string | null; accountManager?: boolean | null; createdAt: Date | string }): ManagedUser {
+  return { id: user.id, name: user.name, email: user.email, role: isAppRole(user.role) ? user.role : 'standard_user', accountManager: Boolean(user.accountManager), createdAt: new Date(user.createdAt).toISOString() }
 }
 
 export async function listManagedUsers(): Promise<ManagedUser[]> {
   await requireAdminSession()
   const result = await auth.api.listUsers({ query: { limit: 100, sortBy: 'createdAt', sortDirection: 'desc' }, headers: await headers() })
-  return result.users.map(toManagedUser)
+  const flags = await db.select({ id: userTable.id, accountManager: userTable.accountManager }).from(userTable)
+  return result.users.map((managed) => toManagedUser({ ...managed, accountManager: flags.find((flag) => flag.id === managed.id)?.accountManager }))
 }
 
-export async function createManagedUser(input: { name: string; email: string; password: string; role: AppRole }) {
+export async function createManagedUser(input: { name: string; email: string; password: string; role: AppRole; accountManager: boolean }) {
   await requireAdminSession()
   if (!input.name.trim() || !input.email.trim() || input.password.length < 8 || !isAppRole(input.role)) throw new Error('Enter valid user details.')
   const result = await auth.api.createUser({ body: { name: input.name.trim(), email: input.email.trim().toLowerCase(), password: input.password, role: input.role }, headers: await headers() })
-  return toManagedUser(result.user)
+  await db.update(userTable).set({ accountManager: input.accountManager }).where(eq(userTable.id, result.user.id))
+  return toManagedUser({ ...result.user, accountManager: input.accountManager })
 }
 
-export async function updateManagedUser(input: { id: string; name: string; role: AppRole }) {
+export async function updateManagedUser(input: { id: string; name: string; role: AppRole; accountManager: boolean }) {
   const admin = await requireAdminSession()
   if (!input.name.trim() || !isAppRole(input.role)) throw new Error('Enter valid user details.')
   if (input.id === admin.id && input.role !== 'system_admin') throw new Error('You cannot remove your own system admin access.')
   const result = await auth.api.adminUpdateUser({ body: { userId: input.id, data: { name: input.name.trim(), role: input.role } }, headers: await headers() })
-  return toManagedUser(result.user)
+  await db.update(userTable).set({ accountManager: input.accountManager }).where(eq(userTable.id, input.id))
+  return toManagedUser({ ...result.user, accountManager: input.accountManager })
 }
 
 export async function deleteManagedUser(id: string) {
