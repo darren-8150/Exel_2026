@@ -27,7 +27,7 @@ export async function createSiteAddress(siteId: string, values: { companyName: s
   const address4 = values.address4.trim() || null
   const postcode = values.postcode.trim()
   const county = values.county.trim()
-  if (!companyName || !buildingName || !address1 || !postcode || !county) throw new Error('Complete the required site address fields.')
+  if (!companyName || !address1 || !postcode || !county) throw new Error('Complete the required site address fields.')
   const [siteAddress] = await db.insert(siteAddresses).values({ id: crypto.randomUUID(), userId, siteId, companyName, buildingName, address1, address2, address3, address4, postcode, county, address: address1, city: county, country: county }).returning({ id: siteAddresses.id, companyName: siteAddresses.companyName, buildingName: siteAddresses.buildingName, address1: siteAddresses.address1, address2: siteAddresses.address2, address3: siteAddresses.address3, address4: siteAddresses.address4, postcode: siteAddresses.postcode, county: siteAddresses.county })
   return siteAddress
 }
