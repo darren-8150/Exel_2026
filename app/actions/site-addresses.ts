@@ -27,6 +27,11 @@ export async function updateSiteAddress(id: string, values: { companyName: strin
   return siteAddress
 }
 
+export async function deleteSiteAddress(id: string) {
+  const userId = await getUserId()
+  await db.delete(siteAddresses).where(and(eq(siteAddresses.id, id), eq(siteAddresses.userId, userId)))
+}
+
 export async function getSiteAddressesForSite(siteId: string) {
   const userId = await getUserId()
   return db.select({ id: siteAddresses.id, companyName: siteAddresses.companyName, buildingName: siteAddresses.buildingName, address1: siteAddresses.address1, address2: siteAddresses.address2, address3: siteAddresses.address3, address4: siteAddresses.address4, postcode: siteAddresses.postcode, county: siteAddresses.county }).from(siteAddresses).where(and(eq(siteAddresses.siteId, siteId), eq(siteAddresses.userId, userId))).orderBy(desc(siteAddresses.createdAt))
