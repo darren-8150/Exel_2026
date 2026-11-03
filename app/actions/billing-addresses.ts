@@ -27,7 +27,7 @@ export async function createBillingAddress(siteId: string, values: { companyName
   const address4 = values.address4.trim() || null
   const postcode = values.postcode.trim()
   const county = values.county.trim()
-  if (!companyName || !buildingName || !address1 || !postcode || !county) throw new Error('Complete the required billing address fields.')
+  if (!companyName || !address1 || !postcode || !county) throw new Error('Complete the required billing address fields.')
   const [billingAddress] = await db.insert(billingAddresses).values({ id: crypto.randomUUID(), userId, siteId, companyName, buildingName, address1, address2, address3, address4, postcode, county, address: address1, city: county, country: county }).returning({ id: billingAddresses.id, address: billingAddresses.address, city: billingAddresses.city, country: billingAddresses.country, companyName: billingAddresses.companyName, buildingName: billingAddresses.buildingName, address1: billingAddresses.address1, address2: billingAddresses.address2, address3: billingAddresses.address3, address4: billingAddresses.address4, postcode: billingAddresses.postcode, county: billingAddresses.county })
   return billingAddress
 }
