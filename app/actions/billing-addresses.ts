@@ -12,6 +12,21 @@ async function getUserId() {
   return session.user.id
 }
 
+export async function updateBillingAddress(id: string, values: { companyName: string; buildingName: string; address1: string; address2: string; address3: string; address4: string; postcode: string; county: string }) {
+  const userId = await getUserId()
+  const companyName = values.companyName.trim()
+  const buildingName = values.buildingName.trim()
+  const address1 = values.address1.trim()
+  const address2 = values.address2.trim() || null
+  const address3 = values.address3.trim() || null
+  const address4 = values.address4.trim() || null
+  const postcode = values.postcode.trim()
+  const county = values.county.trim()
+  if (!companyName || !address1 || !postcode || !county) throw new Error('Complete the required billing address fields.')
+  const [billingAddress] = await db.update(billingAddresses).set({ companyName, buildingName, address1, address2, address3, address4, postcode, county, address: address1, city: county, country: county }).where(and(eq(billingAddresses.id, id), eq(billingAddresses.userId, userId))).returning({ id: billingAddresses.id, address: billingAddresses.address, city: billingAddresses.city, country: billingAddresses.country, companyName: billingAddresses.companyName, buildingName: billingAddresses.buildingName, address1: billingAddresses.address1, address2: billingAddresses.address2, address3: billingAddresses.address3, address4: billingAddresses.address4, postcode: billingAddresses.postcode, county: billingAddresses.county })
+  return billingAddress
+}
+
 export async function getBillingAddressesForSite(siteId: string) {
   const userId = await getUserId()
   return db.select({ id: billingAddresses.id, address: billingAddresses.address, city: billingAddresses.city, country: billingAddresses.country, companyName: billingAddresses.companyName, buildingName: billingAddresses.buildingName, address1: billingAddresses.address1, address2: billingAddresses.address2, address3: billingAddresses.address3, address4: billingAddresses.address4, postcode: billingAddresses.postcode, county: billingAddresses.county }).from(billingAddresses).where(and(eq(billingAddresses.siteId, siteId), eq(billingAddresses.userId, userId))).orderBy(desc(billingAddresses.createdAt))
