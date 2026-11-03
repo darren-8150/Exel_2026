@@ -6,6 +6,13 @@ import { asc, count, ilike } from 'drizzle-orm'
 
 const SUPPLIERS_PAGE_SIZE = 50
 
+export async function createSupplier(name: string) {
+  const trimmedName = name.trim()
+  if (!trimmedName) throw new Error('Supplier name is required.')
+  const [supplier] = await db.insert(suppliers).values({ id: crypto.randomUUID(), name: trimmedName }).returning({ id: suppliers.id, name: suppliers.name })
+  return supplier
+}
+
 export async function getSuppliers(page = 1, query = '') {
   const safePage = Math.max(1, page)
   const trimmedQuery = query.trim()
