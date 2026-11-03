@@ -7,6 +7,7 @@ export const user = pgTable('user', {
   emailVerified: boolean('emailVerified').notNull().default(false),
   image: text('image'),
   role: text('role').notNull().default('standard_user'),
+  accountManager: boolean('accountManager').notNull().default(false),
   banned: boolean('banned').default(false),
   banReason: text('banReason'),
   banExpires: timestamp('banExpires'),
@@ -30,7 +31,7 @@ export const verification = pgTable('verification', {
 })
 
 export const contacts = pgTable('contacts', {
-  id: integer('id').primaryKey().generatedAlwaysAsIdentity(), userId: text('userId').notNull(), siteId: text('siteId'), name: text('name').notNull(), company: text('company').notNull(), email: text('email').notNull(), phone: text('phone'), status: text('status').notNull().default('New'), lastContactedAt: timestamp('lastContactedAt'), createdAt: timestamp('createdAt').notNull().defaultNow(),
+  id: integer('id').primaryKey().generatedAlwaysAsIdentity(), userId: text('userId').notNull(), siteId: text('siteId'), name: text('name').notNull(), company: text('company').notNull(), email: text('email').notNull(), phone: text('phone'), mobile: text('mobile'), isPrimary: boolean('isPrimary').notNull().default(false), status: text('status').notNull().default('New'), lastContactedAt: timestamp('lastContactedAt'), createdAt: timestamp('createdAt').notNull().defaultNow(),
 })
 
 export const activities = pgTable('activities', {
@@ -38,15 +39,15 @@ export const activities = pgTable('activities', {
 })
 
 export const customers = pgTable('customers', {
-  id: text('id').primaryKey(), userId: text('userId').notNull(), name: text('name').notNull(), accountName: text('accountName'), customerSuffix: text('customerSuffix'), webAddress: text('webAddress'), loggedAt: timestamp('loggedAt'), loggedBy: text('loggedBy'), createdAt: timestamp('createdAt').notNull().defaultNow(),
+  id: text('id').primaryKey(), userId: text('userId').notNull(), name: text('name').notNull(), accountName: text('accountName'), accountManagerId: text('accountManagerId'), customerSuffix: text('customerSuffix'), webAddress: text('webAddress'), accountNumber: text('accountNumber'), notes: text('notes'), preferredQuoteMaster: text('preferredQuoteMaster'), preferredInvoiceMaster: text('preferredInvoiceMaster'), loggedAt: timestamp('loggedAt'), loggedBy: text('loggedBy'), createdAt: timestamp('createdAt').notNull().defaultNow(),
 })
 
 export const billingAddresses = pgTable('billing_addresses', {
-  id: text('id').primaryKey(), userId: text('userId').notNull(), siteId: text('siteId').notNull(), address: text('address').notNull(), city: text('city').notNull(), postcode: text('postcode').notNull(), country: text('country').notNull(), createdAt: timestamp('createdAt').notNull().defaultNow(),
+  id: text('id').primaryKey(), userId: text('userId').notNull(), siteId: text('siteId').notNull(), address: text('address').notNull(), city: text('city').notNull(), postcode: text('postcode').notNull(), country: text('country').notNull(), companyName: text('companyName'), buildingName: text('buildingName'), address1: text('address1'), address2: text('address2'), address3: text('address3'), address4: text('address4'), county: text('county'), isPrimary: boolean('isPrimary').notNull().default(false), createdAt: timestamp('createdAt').notNull().defaultNow(),
 })
 
 export const siteAddresses = pgTable('site_address', {
-  id: text('id').primaryKey(), userId: text('userId').notNull(), siteId: text('siteId').notNull(), address: text('address').notNull(), city: text('city').notNull(), postcode: text('postcode').notNull(), country: text('country').notNull(), createdAt: timestamp('createdAt').notNull().defaultNow(),
+  id: text('id').primaryKey(), userId: text('userId').notNull(), siteId: text('siteId').notNull(), address: text('address').notNull(), city: text('city').notNull(), postcode: text('postcode').notNull(), country: text('country').notNull(), companyName: text('companyName'), buildingName: text('buildingName'), address1: text('address1'), address2: text('address2'), address3: text('address3'), address4: text('address4'), county: text('county'), isPrimary: boolean('isPrimary').notNull().default(false), createdAt: timestamp('createdAt').notNull().defaultNow(),
 })
 
 export type Role = 'standard_user' | 'ipad_user' | 'administrator' | 'system_admin'
