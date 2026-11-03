@@ -30,6 +30,11 @@ export async function updateContact(id: number, values: { name: string; company:
   return contact
 }
 
+export async function deleteContact(id: number) {
+  const userId = await getUserId()
+  await db.delete(contacts).where(and(eq(contacts.id, id), eq(contacts.userId, userId)))
+}
+
 export async function getContactsForSite(siteId: string) {
   const userId = await getUserId()
   return db.select({ id: contacts.id, name: contacts.name, company: contacts.company, email: contacts.email, phone: contacts.phone, mobile: contacts.mobile, isPrimary: contacts.isPrimary, status: contacts.status }).from(contacts).where(and(eq(contacts.userId, userId), eq(contacts.siteId, siteId))).orderBy(asc(contacts.name))
