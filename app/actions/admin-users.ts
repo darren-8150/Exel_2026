@@ -21,8 +21,9 @@ export type ManagedUser = {
   createdAt: string
 }
 
-function toManagedUser(user: { id: string; name: string; email: string; role?: string | null; accountManager?: boolean | null; createdAt: Date | string }): ManagedUser {
-  return { id: user.id, name: user.name, email: user.email, role: isAppRole(user.role) ? user.role : 'standard_user', accountManager: Boolean(user.accountManager), createdAt: new Date(user.createdAt).toISOString() }
+function toManagedUser(user: { id: string; name: string; email: string; role?: string | null; accountManager?: boolean | null; createdAt?: Date | string | null }): ManagedUser {
+  const createdAt = user.createdAt ? new Date(user.createdAt) : new Date()
+  return { id: user.id, name: user.name, email: user.email, role: isAppRole(user.role) ? user.role : 'standard_user', accountManager: Boolean(user.accountManager), createdAt: Number.isNaN(createdAt.getTime()) ? new Date().toISOString() : createdAt.toISOString() }
 }
 
 export async function listManagedUsers(): Promise<ManagedUser[]> {
