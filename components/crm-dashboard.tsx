@@ -1,7 +1,8 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { Building2, ChevronDown, LayoutDashboard, Menu, Users, X } from 'lucide-react'
+import { Building2, CheckSquare, ChevronDown, LayoutDashboard, Menu, Users, X } from 'lucide-react'
+import SuppliersChecks from '@/components/suppliers-checks'
 import { SignOutButton } from '@/components/auth-form'
 import UserManagement from '@/components/user-management'
 import SitesTable from '@/components/sites-table'
@@ -20,9 +21,10 @@ type CrmDashboardProps = {
   currentUserRole?: string | null
   sites: Site[]
   accountManagers: AccountManager[]
+  suppliers: Awaited<ReturnType<typeof import('@/app/actions/suppliers').getSuppliers>>
 }
 
-export default function CrmDashboard({ currentUserId, currentUserName, currentUserEmail, currentUserRole, sites, accountManagers }: CrmDashboardProps) {
+export default function CrmDashboard({ currentUserId, currentUserName, currentUserEmail, currentUserRole, sites, accountManagers, suppliers }: CrmDashboardProps) {
   const [active, setActive] = useState('Dashboard')
   const [mobileOpen, setMobileOpen] = useState(false)
   const [accountOpen, setAccountOpen] = useState(false)
@@ -74,7 +76,7 @@ export default function CrmDashboard({ currentUserId, currentUserName, currentUs
             <>
               <p className="mt-10 px-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#7a8780]">Admin Area</p>
               <nav className="mt-3 flex flex-col gap-1">
-                <button onClick={() => { setActive('Users'); setMobileOpen(false) }} className={`flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium transition ${active === 'Users' ? 'bg-[#e7f0f7] text-[#0f5993]' : 'text-[#67736c] hover:bg-[#f0f3ef]'}`}><Users size={18} strokeWidth={1.8} />Users</button>
+                <button onClick={() => { setActive('Users'); setMobileOpen(false) }} className={`flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium transition ${active === 'Users' ? 'bg-[#e7f0f7] text-[#0f5993]' : 'text-[#67736c] hover:bg-[#f0f3ef]'}`}><Users size={18} strokeWidth={1.8} />Users</button><button onClick={() => { setActive('Suppliers Certs'); setMobileOpen(false) }} className={`flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium transition ${active === 'Suppliers Certs' ? 'bg-[#e7f0f7] text-[#0f5993]' : 'text-[#67736c] hover:bg-[#f0f3ef]'}`}><CheckSquare size={18} strokeWidth={1.8} />Suppliers Certs</button>
               </nav>
             </>
           )}
@@ -112,7 +114,7 @@ export default function CrmDashboard({ currentUserId, currentUserName, currentUs
           </div>
         </header>
         <div className="mx-auto max-w-[1440px] px-5 py-8 md:px-10 md:py-10">
-          {active === 'Users' ? <UserManagement currentUserId={currentUserId} /> : active === 'Customers' ? <SitesTable initialSites={sites} accountManagers={accountManagers} /> : <><p className="text-sm font-medium text-[#6f8493]">Wednesday, October 8, 2026</p><h1 className="mt-2 font-serif text-4xl tracking-tight md:text-5xl">{greeting}, {currentUserName.split(' ')[0]}<span className="text-[#c48b4d">.</span></h1></>}
+          {active === 'Users' ? <UserManagement currentUserId={currentUserId} /> : active === 'Suppliers Certs' ? <SuppliersChecks initialData={suppliers} /> : active === 'Customers' ? <SitesTable initialSites={sites} accountManagers={accountManagers} /> : <><p className="text-sm font-medium text-[#6f8493]">Wednesday, October 8, 2026</p><h1 className="mt-2 font-serif text-4xl tracking-tight md:text-5xl">{greeting}, {currentUserName.split(' ')[0]}<span className="text-[#c48b4d">.</span></h1></>}
         </div>
       </main>
     </div>
