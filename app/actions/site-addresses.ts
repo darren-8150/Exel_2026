@@ -2,7 +2,7 @@
 
 import { auth } from '@/lib/auth'
 import { db } from '@/lib/db'
-import { siteAddresses } from '@/lib/db/schema'
+import { customers, siteAddresses } from '@/lib/db/schema'
 import { eq, and, desc } from 'drizzle-orm'
 import { headers } from 'next/headers'
 
@@ -50,4 +50,10 @@ export async function createSiteAddress(siteId: string, values: { companyName: s
   if (!companyName || !address1 || !postcode || !county) throw new Error('Complete the required site address fields.')
   const [siteAddress] = await db.insert(siteAddresses).values({ id: crypto.randomUUID(), userId, siteId, companyName, buildingName, address1, address2, address3, address4, postcode, county, address: address1, city: county, country: county }).returning({ id: siteAddresses.id, companyName: siteAddresses.companyName, buildingName: siteAddresses.buildingName, address1: siteAddresses.address1, address2: siteAddresses.address2, address3: siteAddresses.address3, address4: siteAddresses.address4, postcode: siteAddresses.postcode, county: siteAddresses.county })
   return siteAddress
+}
+
+export async function getSiteAddressWithCustomer(id: string) {
+  const userId = await getUserId()
+  const [siteAddress] = await db.select({ id: siteAddresses.id, siteId: siteAddresses.siteId, companyName: siteAddresses.companyName, buildingName: siteAddresses.buildingName, address1: siteAddresses.address1, address2: siteAddresses.address2, address3: siteAddresses.address3, address4: siteAddresses.address4, postcode: siteAddresses.postcode, county: siteAddresses.county, customerName: customers.name }).from(siteAddresses).leftJoin(customers, and(eq(customers.id, siteAddresses.siteId), eq(customers.userId, userId))).where(and(eq(siteAddresses.id, id), eq(siteAddresses.userId, userId))).limit(1)
+  return siteAddress ?? null
 }

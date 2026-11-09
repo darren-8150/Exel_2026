@@ -22,10 +22,12 @@ type CrmDashboardProps = {
   sites: Site[]
   accountManagers: AccountManager[]
   suppliers: Awaited<ReturnType<typeof import('@/app/actions/suppliers').getSuppliers>>
+  initialCustomerId?: string
+  initialSiteAddresses?: Awaited<ReturnType<typeof import('@/app/actions/site-addresses').getSiteAddressesForSite>>
 }
 
-export default function CrmDashboard({ currentUserId, currentUserName, currentUserEmail, currentUserRole, sites, accountManagers, suppliers }: CrmDashboardProps) {
-  const [active, setActive] = useState('Dashboard')
+export default function CrmDashboard({ currentUserId, currentUserName, currentUserEmail, currentUserRole, sites, accountManagers, suppliers, initialCustomerId, initialSiteAddresses }: CrmDashboardProps) {
+  const [active, setActive] = useState(initialCustomerId ? 'Customers' : 'Dashboard')
   const [mobileOpen, setMobileOpen] = useState(false)
   const [accountOpen, setAccountOpen] = useState(false)
   const [greeting, setGreeting] = useState('Good morning')
@@ -114,7 +116,7 @@ export default function CrmDashboard({ currentUserId, currentUserName, currentUs
           </div>
         </header>
         <div className="mx-auto max-w-[1440px] px-5 py-8 md:px-10 md:py-10">
-          {active === 'Users' ? <UserManagement currentUserId={currentUserId} /> : active === 'Suppliers Certs' ? <SuppliersChecks initialData={suppliers} /> : active === 'Customers' ? <SitesTable initialSites={sites} accountManagers={accountManagers} /> : <><p className="text-sm font-medium text-[#6f8493]">Wednesday, October 8, 2026</p><h1 className="mt-2 font-serif text-4xl tracking-tight md:text-5xl">{greeting}, {currentUserName.split(' ')[0]}<span className="text-[#c48b4d">.</span></h1></>}
+          {active === 'Users' ? <UserManagement currentUserId={currentUserId} /> : active === 'Suppliers Certs' ? <SuppliersChecks initialData={suppliers} /> : active === 'Customers' ? <SitesTable initialSites={sites} initialCustomerId={initialCustomerId} initialSiteAddresses={initialSiteAddresses} accountManagers={accountManagers} /> : <><p className="text-sm font-medium text-[#6f8493]">Wednesday, October 8, 2026</p><h1 className="mt-2 font-serif text-4xl tracking-tight md:text-5xl">{greeting}, {currentUserName.split(' ')[0]}<span className="text-[#c48b4d">.</span></h1></>}
         </div>
       </main>
     </div>
